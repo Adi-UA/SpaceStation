@@ -9,7 +9,7 @@ from player_ship import playerShip
 def add_enemy(enemy_ships):
     x = random.randrange(10, WIN_WIDTH - 80)
     y = 10
-    n = random.randint(1,3)
+    n = random.randint(1, 3)
     print(n)
     if n == 1:
         enemy_ships.append(enemyShipCreeper(x, y))
@@ -34,18 +34,17 @@ def eval_edge_enemies(enemy_ships):
         enemy_ships.remove(ship)
 
 
-def draw(window, player_ship, enemy_ships,score):
+def draw(window, player_ship, enemy_ships, score):
     window.fill((0, 0, 51))
 
     for enemy_ship in enemy_ships:
         enemy_ship.draw(window)
 
     font = pygame.font.SysFont(None, 25)
-    text = font.render("Score: "+str(score), True, (255,255,255))
-    window.blit(text,(640,0))
+    text = font.render("Score: "+str(score), True, (255, 255, 255))
+    window.blit(text, (640, 0))
     player_ship.draw(window)
     pygame.display.update()
-
 
 
 def main():
@@ -84,7 +83,7 @@ def main():
             if enemy_ship.collide(player_ship):
                 score += 1
                 enemy_ship.move(reverse=True)
-                
+
             else:
                 enemy_ship.move()
 
