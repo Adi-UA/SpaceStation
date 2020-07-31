@@ -23,9 +23,11 @@ def image_reader(directory, filename):
 pygame.init()
 game_clock = pygame.time.Clock()
 
-WIN_WIDTH = 600
-WIN_HEIGHT = 800
+WIN_WIDTH = 1280
+WIN_HEIGHT = 720
 WINDOW = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 resource_path = os.path.dirname(__file__)
-ENEMY_SHIP_IMG = image_reader(resource_path, "player_ship.png")
+ENEMY_SHIP_IMG_1 = image_reader(resource_path, "alien_1.png")
+ENEMY_SHIP_IMG_2 = image_reader(resource_path, "alien_2.png")
 PLAYER_SHIP_IMG = image_reader(resource_path, "player_ship.png")
+MAX_ENEMY_TICK = 100

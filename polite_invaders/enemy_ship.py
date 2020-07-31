@@ -7,7 +7,7 @@ class enemyShip:
         self.x = x
         self.y = y
         self.y_velocity = 0.3/100*WIN_HEIGHT
-        self.img = ENEMY_SHIP_IMG
+        self.img = ENEMY_SHIP_IMG_1
 
     def draw(self, window):
         window.blit(self.img, (self.x, self.y))
@@ -30,3 +30,14 @@ class enemyShip:
             self.y_velocity = -self.y_velocity
 
         self.y += self.y_velocity
+
+
+class enemyShipCreeper(enemyShip):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.img = ENEMY_SHIP_IMG_1
+
+class enemyShipDeathStar(enemyShip):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.img = ENEMY_SHIP_IMG_2
