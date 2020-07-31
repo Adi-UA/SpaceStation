@@ -9,7 +9,14 @@ from player_ship import playerShip
 def add_enemy(enemy_ships):
     x = random.randrange(10, WIN_WIDTH - 80)
     y = 10
-    enemy_ships.append(enemyShipCookie(x, y))
+    n = random.randint(1,3)
+    print(n)
+    if n == 1:
+        enemy_ships.append(enemyShipCreeper(x, y))
+    elif n == 2:
+        enemy_ships.append(enemyShipDeathStar(x, y))
+    elif n == 3:
+        enemy_ships.append(enemyShipCookie(x, y))
     return enemy_ships
 
 
@@ -76,7 +83,6 @@ def main():
         for enemy_ship in enemy_ships:
             if enemy_ship.collide(player_ship):
                 score += 1
-                print(score)
                 enemy_ship.move(reverse=True)
                 
             else:
