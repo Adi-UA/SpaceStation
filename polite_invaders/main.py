@@ -27,18 +27,24 @@ def eval_edge_enemies(enemy_ships):
         enemy_ships.remove(ship)
 
 
-def draw(window, player_ship, enemy_ships):
+def draw(window, player_ship, enemy_ships,score):
     window.fill((0, 0, 51))
 
     for enemy_ship in enemy_ships:
         enemy_ship.draw(window)
 
+    font = pygame.font.SysFont(None, 25)
+    text = font.render("Score: "+str(score), True, (255,255,255))
+    window.blit(text,(640,0))
     player_ship.draw(window)
     pygame.display.update()
 
 
+
 def main():
+    global MAX_ENEMY_TICK
     isRunning = True
+    score = 0
     player_ship = playerShip(WIN_WIDTH//2, WIN_HEIGHT-70)
     enemy_ships = add_enemy(list())
     enemy_tick = MAX_ENEMY_TICK
@@ -69,12 +75,14 @@ def main():
 
         for enemy_ship in enemy_ships:
             if enemy_ship.collide(player_ship):
-                print("HERE")
+                score += 1
+                print(score)
                 enemy_ship.move(reverse=True)
+                
             else:
                 enemy_ship.move()
 
-        draw(WINDOW, player_ship, enemy_ships)
+        draw(WINDOW, player_ship, enemy_ships, score)
 
 
 main()
