@@ -4,15 +4,26 @@ from reference import *
 from enemy_ship import enemyShip
 from player_ship import playerShip
 
-def enemy_at_edge(enemy_ships):
+
+def eval_edge_enemies(enemy_ships):
+    to_remove = list()
     for enemy_ship in enemy_ships:
         if enemy_ship.y > WIN_HEIGHT-70:
-            return True
-    return False
+            pygame.quit()
+            exit(0)
+        elif enemy_ship.y < 10:
+            to_remove.append(enemy_ship)
 
-def draw(window, player_ship, enemy_ship):
+    for ship in to_remove:
+        enemy_ships.remove(ship)
+
+
+def draw(window, player_ship, enemy_ships):
     window.fill((0, 0, 51))
-    enemy_ship.draw(window)
+
+    for enemy_ship in enemy_ships:
+        enemy_ship.draw(window)
+
     player_ship.draw(window)
     pygame.display.update()
 
@@ -39,14 +50,15 @@ def main():
         else:
             player_ship.move("N")
 
-        if enemy_at_edge(enemy_ships):
-            isRunning = False
-            pygame.quit()
-            exit(0)
+        eval_edge_enemies(enemy_ships)
 
         for enemy_ship in enemy_ships:
-            enemy_ship.move()
-        draw(WINDOW, player_ship, enemy_ship)
+            if enemy_ship.collide(player_ship):
+                enemy_ship.move(reverse=True)
+            else:
+                enemy_ship.move()
+
+        draw(WINDOW, player_ship, enemy_ships)
 
 
 main()

@@ -1,6 +1,7 @@
 import pygame
 from reference import *
 
+
 class playerShip:
     def __init__(self, x, y):
         self.x = x
@@ -23,6 +24,9 @@ class playerShip:
 
         if self.MOVE_TICK < 4:
             self.MOVE_TICK += 1
+
+    def get_mask(self):
+        return pygame.mask.from_surface(self.img)
 
     def draw(self, window):
         window.blit(self.img, (self.x, self.y))
