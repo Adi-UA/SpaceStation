@@ -7,7 +7,6 @@ class enemyShip:
         self.x = x
         self.y = y
         self.y_velocity = 0.3/100*WIN_HEIGHT
-        self.img = ENEMY_SHIP_IMG_1
 
     def draw(self, window):
         window.blit(self.img, (self.x, self.y))
@@ -41,3 +40,8 @@ class enemyShipDeathStar(enemyShip):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.img = ENEMY_SHIP_IMG_2
+
+class enemyShipCookie(enemyShip):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.img = ENEMY_SHIP_IMG_3

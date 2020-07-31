@@ -2,14 +2,14 @@ import pygame
 import os
 import random
 from reference import *
-from enemy_ship import enemyShip, enemyShipCreeper, enemyShipDeathStar
+from enemy_ship import enemyShip, enemyShipCreeper, enemyShipDeathStar, enemyShipCookie
 from player_ship import playerShip
 
 
 def add_enemy(enemy_ships):
     x = random.randrange(10, WIN_WIDTH - 80)
     y = 10
-    enemy_ships.append(enemyShipCreeper(x, y))
+    enemy_ships.append(enemyShipCookie(x, y))
     return enemy_ships
 
 
