@@ -12,25 +12,41 @@ resource_path = os.path.dirname(__file__)
 
 
 class enemyShip:
-    def __init__(self):
-        self.x = 600
-        self.y = 10
-        self.img = image_reader(resource_path, "creeper2.png")
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.y_velocity = 5
+        self.img = image_reader(resource_path, "player_ship.png")
 
     def draw(self, window):
         window.blit(self.img, (self.x, self.y))
 
     def move(self):
-        self.y += 5
+        self.y += self.y_velocity
 
 
 class playerShip:
-    def __init__(self):
-        self.x = 600
-        self.y = 650
-        self.img = image_reader(resource_path, "creeper.png")
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.x_velocity = 5
+        self.MOVE_TICK = 0
+        self.img = image_reader(resource_path, "player_ship.png")
 
+    def move(self, direction):
+        if direction == "L":
+            new_x = self.x - (self.x_velocity + self.MOVE_TICK)
+        elif direction == "R":
+            new_x = self.x + (self.x_velocity + self.MOVE_TICK)
+        else:
+            self.MOVE_TICK = 0
+            return
 
+        if new_x > 10 and new_x < 1220:
+            self.x = new_x
+
+        if self.MOVE_TICK < 4:
+            self.MOVE_TICK += 1
 
     def draw(self, window):
         window.blit(self.img, (self.x, self.y))
@@ -61,17 +77,26 @@ def draw(window, player_ship, enemy_ship):
 
 def main():
     isRunning = True
-    player_ship = playerShip()
-    enemy_ship = enemyShip()
+    player_ship = playerShip(600, 650)
+    enemy_ship = enemyShip(600, 10)
 
     while isRunning:
         game_clock.tick(60)
 
+        keys = pygame.key.get_pressed()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 isRunning = False
                 pygame.quit()
-                
+                exit(0)
+
+        if keys[pygame.K_LEFT]:
+            player_ship.move("L")
+        elif keys[pygame.K_RIGHT]:
+            player_ship.move("R")
+        else:
+            player_ship.move("N")
+
         enemy_ship.move()
         draw(WINDOW, player_ship, enemy_ship)
 
