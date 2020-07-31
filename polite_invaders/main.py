@@ -69,6 +69,7 @@ def main():
 
         for enemy_ship in enemy_ships:
             if enemy_ship.collide(player_ship):
+                print("HERE")
                 enemy_ship.move(reverse=True)
             else:
                 enemy_ship.move()

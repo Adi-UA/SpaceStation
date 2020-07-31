@@ -23,8 +23,8 @@ class enemyShip:
             overlaps = player_ship_mask.overlap(self_mask, offset)
 
             if overlaps:
-                return True
                 self.has_collided = True
+                return True
             else:
                 return False
         else:
