@@ -3,7 +3,7 @@ import os
 import random
 
 resource_path = os.path.dirname(__file__)
-songs = ["/ImperialMarch.ogg", "/rick_and_morty.ogg", "/StarTrek.ogg", "/Starwars.ogg"]
+songs = ["/ImperialMarch.ogg", "/rick_and_morty.ogg", "/StarTrek.ogg", "/Starwars.ogg", "/RocketMan.ogg", "/Starman.ogg", "/Space_Oddity.ogg"]
 
 def random_music():
     i = random.randint(0,len(songs)-1)

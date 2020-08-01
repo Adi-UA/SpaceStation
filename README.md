@@ -1,6 +1,13 @@
 # ToTheMoon
 This is our project for To The Moon and Hack (MLH)!
 
+
+![](images/home.png)
+
+![](images/game.png)
+
+![](images/music.png)
+
 ## What
 
 We thought space could get pretty boring without anything to do, so we made a space "station". With our space station you can:
@@ -45,6 +52,14 @@ later loaded when you want the AI to play in a non-training scenario. The traini
     * Astronaut background from UHDPaper.com
     * Daniel Zawadzki's CSS from templatemonster.com which served as the basis for our modifications
     * Space Music at www.bensound.com" from Bensound
+    * List of songs for our radio:
+        * Starwars Theme
+        * Imperial March
+        * Rick and Morty Theme
+        * Star Trek 2009 Theme
+        * Rocket Man
+        * Space Oddity
+        * Starman
     
     
 # What's left
