@@ -6,6 +6,9 @@ from enemy_ship import enemyShip, enemyShipCreeper, enemyShipDeathStar, enemyShi
 from player_ship import playerShip
 from star import Star
 from projectile import Projectile, MailProjectile
+from apology import Apology
+
+"""Music: www.bensound.com" or "Royalty Free Music from Bensound"""
 
 
 def create_mail(mail_list, x):
@@ -119,7 +122,7 @@ def lose_screen(window, star_set):
     exit(0)
 
 
-def draw(window, star_set, mail_list, player_ship, enemy_ships, score, time_in_s):
+def draw(window, star_set, mail_list, player_ship, enemy_ships, apologies, score, time_in_s):
     window.fill((18, 9, 10))
 
     for star in star_set:
@@ -131,11 +134,14 @@ def draw(window, star_set, mail_list, player_ship, enemy_ships, score, time_in_s
     for enemy_ship in enemy_ships:
         enemy_ship.draw(window)
 
+    for apology in apologies:
+        apology.draw(window)
+
     font = pygame.font.Font(resource_path+"/comicsans.ttf", 30)
     text = font.render("Score: "+str(score), True, (255, 255, 255))
     window.blit(text, (10, 5))
 
-    text = font.render("Time: "+str(round(time_in_s)), True, (255, 255, 255))
+    text = font.render("Time: "+str(time_in_s), True, (255, 255, 255))
     window.blit(text, (WIN_WIDTH - 120, 5))
 
     player_ship.draw(window)
@@ -152,8 +158,10 @@ def main():
     mail_list = list()
     player_ship = playerShip(WIN_WIDTH//2, WIN_HEIGHT-70)
     enemy_ships = add_enemy(list())
+    apologies = list()
     enemy_tick = MAX_ENEMY_TICK
     projectile_tick = PROJECTILE_TICK
+    clear_text_tick = CLEAR_TEXT_TICK
 
     start_screen(WINDOW, star_set)
     start_time = pygame.time.get_ticks()
@@ -167,12 +175,20 @@ def main():
             pygame.quit()
             exit(0)
 
-        time_elapsed_in_s = (pygame.time.get_ticks() - start_time)/1000
+        time_elapsed_in_s = round((pygame.time.get_ticks() - start_time)/1000)
+
         if time_elapsed_in_s >= 900:
             win_screen(WINDOW, star_set, "l")
             isRunning = False
             pygame.quit()
             exit(0)
+
+        if clear_text_tick < 1:
+            if len(apologies) > 0:
+                apologies.pop(0)
+            clear_text_tick = CLEAR_TEXT_TICK
+        else:
+            clear_text_tick -= 1
 
         if enemy_tick < 1:
             enemy_tick = MAX_ENEMY_TICK
@@ -223,6 +239,10 @@ def main():
 
         for enemy_ship in enemy_to_remove:
             enemy_ship.move(reverse=True)
+            rand = random.randint(0, 3)
+            apology = Apology(
+                APOLOGY_OPTIONS[rand], enemy_ship.x, enemy_ship.y)
+            apologies.append(apology)
 
         for mail_projectile in projectile_to_remove:
             mail_list.remove(mail_projectile)
@@ -231,7 +251,7 @@ def main():
         eval_edge_projectiles(mail_list)
 
         draw(WINDOW, star_set, mail_list, player_ship,
-             enemy_ships, score, time_elapsed_in_s)
+             enemy_ships, apologies, score, time_elapsed_in_s)
 
 
 main()

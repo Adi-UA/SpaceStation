@@ -32,7 +32,12 @@ ENEMY_SHIP_IMG_2 = image_reader(resource_path, "alien_2.png")
 ENEMY_SHIP_IMG_3 = image_reader(resource_path, "alien_3.png")
 PLAYER_SHIP_IMG = image_reader(resource_path, "player_ship.png")
 MAIL_PROJECTILE_IMG = image_reader(resource_path, "mail_projectile.png")
+APOLOGY_OPTIONS = ["Ok, I'll leave", "Sorry", "I understand, I'll go now", "My bad"]
 NORMAL_STAR_IMG = pygame.Surface((5, 5))
 NORMAL_STAR_IMG.fill((255,255,255))
 MAX_ENEMY_TICK = 150
 PROJECTILE_TICK = 50
+CLEAR_TEXT_TICK = 60
+
+pygame.mixer.music.load(resource_path+"/bensound-summer.ogg")
+pygame.mixer.music.play(-1)
