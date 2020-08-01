@@ -5,7 +5,7 @@ from reference import *
 from enemy_ship import enemyShip, enemyShipCreeper, enemyShipDeathStar, enemyShipCookie
 from player_ship import playerShip
 from star import Star
-from mail_projectile import MailProjectile
+from projectile import Projectile, MailProjectile
 
 
 def create_mail(mail_list, x):
@@ -53,12 +53,11 @@ def eval_edge_projectiles(mail_list):
         mail_list.remove(mail_projectile)
 
 
-def eval_edge_enemies(enemy_ships):
+def eval_edge_enemies(enemy_ships, star_set):
     to_remove = list()
     for enemy_ship in enemy_ships:
         if enemy_ship.y > WIN_HEIGHT-50:
-            pygame.quit()
-            exit(0)
+            lose_screen(WINDOW, star_set)
         elif enemy_ship.y < 10:
             to_remove.append(enemy_ship)
 
@@ -66,7 +65,61 @@ def eval_edge_enemies(enemy_ships):
         enemy_ships.remove(ship)
 
 
-def draw(window, star_set, mail_list, player_ship, enemy_ships, score):
+def start_screen(window, star_set):
+    window.fill((18, 9, 10))
+
+    for star in star_set:
+        star.draw(window)
+
+    font = pygame.font.Font(resource_path+"/comicsans.ttf", 80)
+    text = font.render("POLITE INVADERS :)", True, (255, 255, 255))
+    window.blit(text, (260, WIN_HEIGHT//2 - 30))
+
+    pygame.display.update()
+    pygame.time.wait(3000)
+
+
+def win_screen(window, star_set, win_type):
+    window.fill((18, 9, 10))
+
+    for star in star_set:
+        star.draw(window)
+
+    font = pygame.font.Font(resource_path+"/comicsans.ttf", 60)
+    win_text = font.render("YOU WIN!",
+                           True, (255, 255, 255))
+    window.blit(win_text, (WIN_WIDTH//2-170, WIN_HEIGHT//2 - 80))
+    if win_type == "l":
+        text = font.render("THEY LEGALLY HAD TO LEAVE...",
+                           True, (255, 255, 255))
+        window.blit(text, (160, WIN_HEIGHT//2))
+    else:
+        text = font.render("YOU'RE TOO POLITE TO INVADE...",
+                           True, (255, 255, 255))
+        window.blit(text, (150, WIN_HEIGHT//2))
+
+    pygame.display.update()
+    pygame.time.wait(5000)
+
+
+def lose_screen(window, star_set):
+    window.fill((18, 9, 10))
+
+    for star in star_set:
+        star.draw(window)
+
+    font = pygame.font.Font(resource_path+"/comicsans.ttf", 60)
+    text = font.render("SORRY...YOU WEREN'T POLITE ENOUGH...",
+                       True, (255, 255, 255))
+    window.blit(text, (30, WIN_HEIGHT//2 - 30))
+
+    pygame.display.update()
+    pygame.time.wait(5000)
+    pygame.quit()
+    exit(0)
+
+
+def draw(window, star_set, mail_list, player_ship, enemy_ships, score, time_in_s):
     window.fill((18, 9, 10))
 
     for star in star_set:
@@ -78,9 +131,12 @@ def draw(window, star_set, mail_list, player_ship, enemy_ships, score):
     for enemy_ship in enemy_ships:
         enemy_ship.draw(window)
 
-    font = pygame.font.SysFont(None, 50)
+    font = pygame.font.Font(resource_path+"/comicsans.ttf", 30)
     text = font.render("Score: "+str(score), True, (255, 255, 255))
     window.blit(text, (10, 5))
+
+    text = font.render("Time: "+str(round(time_in_s)), True, (255, 255, 255))
+    window.blit(text, (WIN_WIDTH - 120, 5))
 
     player_ship.draw(window)
 
@@ -99,8 +155,24 @@ def main():
     enemy_tick = MAX_ENEMY_TICK
     projectile_tick = PROJECTILE_TICK
 
+    start_screen(WINDOW, star_set)
+    start_time = pygame.time.get_ticks()
+
     while isRunning:
         game_clock.tick(60)
+
+        if score >= 42:
+            win_screen(WINDOW, star_set, "l")
+            isRunning = False
+            pygame.quit()
+            exit(0)
+
+        time_elapsed_in_s = (pygame.time.get_ticks() - start_time)/1000
+        if time_elapsed_in_s >= 900:
+            win_screen(WINDOW, star_set, "l")
+            isRunning = False
+            pygame.quit()
+            exit(0)
 
         if enemy_tick < 1:
             enemy_tick = MAX_ENEMY_TICK
@@ -155,10 +227,11 @@ def main():
         for mail_projectile in projectile_to_remove:
             mail_list.remove(mail_projectile)
 
-        eval_edge_enemies(enemy_ships)
+        eval_edge_enemies(enemy_ships, star_set)
         eval_edge_projectiles(mail_list)
 
-        draw(WINDOW, star_set, mail_list, player_ship, enemy_ships, score)
+        draw(WINDOW, star_set, mail_list, player_ship,
+             enemy_ships, score, time_elapsed_in_s)
 
 
 main()

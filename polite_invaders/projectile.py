@@ -3,7 +3,7 @@ import random
 from reference import *
 
 
-class MailProjectile:
+class Projectile:
 
     def __init__(self, x, y):
         self.x = x
@@ -36,3 +36,7 @@ class MailProjectile:
         else:
             return False
 
+
+class MailProjectile(Projectile):
+    def __init__(self, x, y):
+        super().__init__(x, y)
