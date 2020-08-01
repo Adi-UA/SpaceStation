@@ -256,7 +256,6 @@ def play():
 
     start_screen(WINDOW, star_set)
     start_time = pygame.time.get_ticks()
-    print('hi')
 
     while isRunning:
         game_clock.tick(60)  # 60 fps
