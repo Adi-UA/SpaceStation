@@ -413,7 +413,7 @@ def run(config_path):
     winner = population.run(eval, 5)
 
 
-def main():
+def trainAI():
     """
     Directive method that runs the training
     """
@@ -423,4 +423,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    trainAI()

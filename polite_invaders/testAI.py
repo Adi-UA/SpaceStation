@@ -443,7 +443,7 @@ def run_model(nn):
         projectile_tick += 1
 
 
-def main():
+def testAI():
     """
     This function is called to run the program with the stored neural net.
     """
@@ -458,4 +458,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    testAI()
