@@ -7,6 +7,7 @@ from player_ship import PlayerShip
 from star import Star
 from projectile import Projectile, MailProjectile
 from apology import Apology
+import eel
 
 """Music: www.bensound.com" or "Royalty Free Music from Bensound"""
 
@@ -237,7 +238,7 @@ def draw(
 
     pygame.display.update()
 
-
+@eel.expose
 def play():
     """
     Run the game
@@ -257,6 +258,7 @@ def play():
 
     start_screen(WINDOW, star_set)
     start_time = pygame.time.get_ticks()
+    print('hi')
 
     while isRunning:
         game_clock.tick(60)  # 60 fps
