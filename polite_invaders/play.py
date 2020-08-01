@@ -7,6 +7,7 @@ from player_ship import PlayerShip
 from star import Star
 from projectile import Projectile, MailProjectile
 from apology import Apology
+import eel
 
 """Music: www.bensound.com" or "Royalty Free Music from Bensound"""
 

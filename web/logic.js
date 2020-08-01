@@ -9,3 +9,6 @@ function test() {
 function play() {
 	eel.play_game();
 }
+function music() {
+	eel.play_music();
+}

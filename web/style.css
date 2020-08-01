@@ -40,3 +40,9 @@ input[type=reset]:hover {
 	align-content: flex-end;
 	display: inline;
 }
+#footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	padding-bottom: 2%;
+}
