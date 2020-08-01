@@ -7,7 +7,7 @@ class EnemyShip:
         self.x = x
         self.y = y
         self.has_collided = False
-        self.y_velocity = 0.3/100*WIN_HEIGHT
+        self.y_velocity = 0.3 / 100 * WIN_HEIGHT
 
     def draw(self, window):
         window.blit(self.img, (self.x, self.y))
@@ -35,12 +35,17 @@ class EnemyShip:
 
     def move(self, reverse=False):
         if reverse:
-            self.y_velocity = -self.y_velocity*1.5
+            self.y_velocity = -self.y_velocity * 1.5
 
         self.y += self.y_velocity
 
     def __eq__(self, other):
-        if other is not None and (isinstance(other, EnemyShip) or issubclass(other, EnemyShip)):
+        if other is not None and (
+            isinstance(
+                other,
+                EnemyShip) or issubclass(
+                other,
+                EnemyShip)):
             return self.x == other.x and self.y == other.y
         else:
             return False
@@ -50,7 +55,7 @@ class EnemyShipCreeper(EnemyShip):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.img = ENEMY_SHIP_IMG_1
-        self.y_velocity = self.y_velocity*2
+        self.y_velocity = self.y_velocity * 2
 
 
 class EnemyShipDeathStar(EnemyShip):
@@ -63,4 +68,4 @@ class EnemyShipCookie(EnemyShip):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.img = ENEMY_SHIP_IMG_3
-        self.y_velocity = self.y_velocity*1.5
+        self.y_velocity = self.y_velocity * 1.5

@@ -11,6 +11,6 @@ class Apology:
         self.y = y
 
     def draw(self, window):
-        font = pygame.font.Font(resource_path+"/comicsans.ttf", 30)
+        font = pygame.font.Font(resource_path + "/comicsans.ttf", 30)
         apology = font.render(self.text, True, (255, 255, 255))
         window.blit(apology, (self.x, self.y))

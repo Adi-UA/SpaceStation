@@ -65,9 +65,9 @@ def get_closest_enemy(enemy_ships):
 
     if len(enemy_ships) > 0:
         chosen = enemy_ships[0]
-        y = (WIN_HEIGHT-70) - chosen.y
+        y = (WIN_HEIGHT - 70) - chosen.y
         for enemy_ship in enemy_ships:
-            cur_y = (WIN_HEIGHT-70) - enemy_ship.y
+            cur_y = (WIN_HEIGHT - 70) - enemy_ship.y
             if cur_y < y:
                 chosen = enemy_ship
                 y = cur_y
@@ -85,7 +85,7 @@ def create_mail(mail_list, x):
         x (int): The position to spawn the projectile at
     """
 
-    y = WIN_HEIGHT-80
+    y = WIN_HEIGHT - 80
     mail_projectile = MailProjectile(x, y)
     mail_list.append(mail_projectile)
 
@@ -146,7 +146,7 @@ def eval_edge_projectiles(mail_list):
 
     to_remove = list()
     for mail_projectile in mail_list:
-        if mail_projectile.y > WIN_HEIGHT-50:
+        if mail_projectile.y > WIN_HEIGHT - 50:
             to_remove.append(mail_projectile)
 
     for mail_projectile in to_remove:
@@ -168,7 +168,7 @@ def eval_edge_enemies(genome, enemy_ships, star_set):
 
     to_remove = list()
     for enemy_ship in enemy_ships:
-        if enemy_ship.y > WIN_HEIGHT-50:
+        if enemy_ship.y > WIN_HEIGHT - 50:
             # Enemy reached earth, so we deduct points and return failure
             genome.fitness -= 1.5
             return False
@@ -182,7 +182,14 @@ def eval_edge_enemies(genome, enemy_ships, star_set):
     return True
 
 
-def draw(window, star_set, mail_list, player_ship, enemy_ships, apologies, score):
+def draw(
+        window,
+        star_set,
+        mail_list,
+        player_ship,
+        enemy_ships,
+        apologies,
+        score):
     """
     Draws the pygame window at each frame
 
@@ -210,8 +217,8 @@ def draw(window, star_set, mail_list, player_ship, enemy_ships, apologies, score
     for apology in apologies:
         apology.draw(window)
 
-    font = pygame.font.Font(resource_path+"/comicsans.ttf", 30)
-    text = font.render("Score: "+str(score), True, (255, 255, 255))
+    font = pygame.font.Font(resource_path + "/comicsans.ttf", 30)
+    text = font.render("Score: " + str(score), True, (255, 255, 255))
     window.blit(text, (10, 5))
 
     player_ship.draw(window)
@@ -238,7 +245,7 @@ def eval(genomes, config):
         score = 0
         star_set = create_stars()
         mail_list = list()
-        player_ship = PlayerShip(WIN_WIDTH//2, WIN_HEIGHT-70)
+        player_ship = PlayerShip(WIN_WIDTH // 2, WIN_HEIGHT - 70)
         enemy_ships = add_enemy(list())
         apologies = list()
         enemy_tick = MAX_ENEMY_TICK
@@ -277,7 +284,8 @@ def eval(genomes, config):
             closest_enemy = get_closest_enemy(enemy_ships)
             decision = make_decision(network, player_ship, closest_enemy)
 
-            # Indicies 0,1, and 2 are checked to see if the ship wants to left, right or stay in place
+            # Indicies 0,1, and 2 are checked to see if the ship wants to left,
+            # right or stay in place
             max_val = max(decision[:3])
 
             if decision[0] == max_val:
@@ -288,11 +296,13 @@ def eval(genomes, config):
                 player_ship.move("N")
 
             if prev_closest_enemy == closest_enemy and prev_closest_enemy is not None:
-                # Iff the ship is chasing the same enemy as the last tick, update fitness based on distance to enemy
+                # Iff the ship is chasing the same enemy as the last tick,
+                # update fitness based on distance to enemy
 
                 new_dist_x = abs(player_ship.x - closest_enemy.x)
 
-                # The ship is in approximately the right place (32 pixels in and around the enemy)
+                # The ship is in approximately the right place (32 pixels in
+                # and around the enemy)
                 if new_dist_x >= 0 and new_dist_x <= 32:
                     genome.fitness += 0.7
                 elif new_dist_x < prev_dist_x:  # Give it points if it is got closer since the last check
@@ -303,7 +313,8 @@ def eval(genomes, config):
             else:
                 prev_closest_enemy = closest_enemy
 
-            # Index 3's value in decision is used to see if the ship should shoot
+            # Index 3's value in decision is used to see if the ship should
+            # shoot
             if decision[3] > 0.5 and projectile_tick >= PROJECTILE_TICK:
                 create_mail(mail_list, player_ship.x)
                 projectile_tick = 0
@@ -328,7 +339,8 @@ def eval(genomes, config):
 
             for enemy_ship in enemy_ships:
                 if enemy_ship.collide(player_ship):
-                    # Also give points is the AI earns points by bumping into the enemy
+                    # Also give points is the AI earns points by bumping into
+                    # the enemy
                     score += 1
                     genome.fitness += 2
                     enemy_to_remove.append(enemy_ship)
@@ -338,7 +350,8 @@ def eval(genomes, config):
                 else:
                     enemy_ship.move()
 
-            # Reverse enemy ships  and projectiles that have collided with something
+            # Reverse enemy ships  and projectiles that have collided with
+            # something
             for enemy_ship in enemy_to_remove:
                 enemy_ship.move(reverse=True)
 
@@ -351,7 +364,8 @@ def eval(genomes, config):
             for mail_projectile in projectile_to_remove:
                 mail_list.remove(mail_projectile)
 
-            # Check if any enemies have reached the edge and if they have break and move onto the next genome
+            # Check if any enemies have reached the edge and if they have break
+            # and move onto the next genome
             result = eval_edge_enemies(genome, enemy_ships, star_set)
             if not result:
                 isRunning = False

@@ -20,7 +20,7 @@ def create_mail(mail_list, x):
         x (int): The position to spawn the projectile at
     """
 
-    y = WIN_HEIGHT-80
+    y = WIN_HEIGHT - 80
     mail_projectile = MailProjectile(x, y)
     mail_list.append(mail_projectile)
 
@@ -81,7 +81,7 @@ def eval_edge_projectiles(mail_list):
 
     to_remove = list()
     for mail_projectile in mail_list:
-        if mail_projectile.y > WIN_HEIGHT-50:
+        if mail_projectile.y > WIN_HEIGHT - 50:
             to_remove.append(mail_projectile)
 
     for mail_projectile in to_remove:
@@ -102,7 +102,7 @@ def eval_edge_enemies(enemy_ships, star_set):
 
     to_remove = list()
     for enemy_ship in enemy_ships:
-        if enemy_ship.y > WIN_HEIGHT-50:
+        if enemy_ship.y > WIN_HEIGHT - 50:
             lose_screen(WINDOW, star_set)
         elif enemy_ship.y < 10:
             to_remove.append(enemy_ship)
@@ -124,9 +124,9 @@ def start_screen(window, star_set):
     for star in star_set:
         star.draw(window)
 
-    font = pygame.font.Font(resource_path+"/comicsans.ttf", 80)
+    font = pygame.font.Font(resource_path + "/comicsans.ttf", 80)
     text = font.render("POLITE INVADERS :)", True, (255, 255, 255))
-    window.blit(text, (260, WIN_HEIGHT//2 - 30))
+    window.blit(text, (260, WIN_HEIGHT // 2 - 30))
 
     pygame.display.update()
     pygame.time.wait(3000)
@@ -147,18 +147,18 @@ def win_screen(window, star_set, win_type):
     for star in star_set:
         star.draw(window)
 
-    font = pygame.font.Font(resource_path+"/comicsans.ttf", 60)
+    font = pygame.font.Font(resource_path + "/comicsans.ttf", 60)
     win_text = font.render("YOU WIN!",
                            True, (255, 255, 255))
-    window.blit(win_text, (WIN_WIDTH//2-170, WIN_HEIGHT//2 - 80))
+    window.blit(win_text, (WIN_WIDTH // 2 - 170, WIN_HEIGHT // 2 - 80))
     if win_type == "l":
         text = font.render("THEY LEGALLY HAD TO LEAVE...",
                            True, (255, 255, 255))
-        window.blit(text, (160, WIN_HEIGHT//2))
+        window.blit(text, (160, WIN_HEIGHT // 2))
     else:
         text = font.render("YOU'RE TOO POLITE TO INVADE...",
                            True, (255, 255, 255))
-        window.blit(text, (150, WIN_HEIGHT//2))
+        window.blit(text, (150, WIN_HEIGHT // 2))
 
     pygame.display.update()
     pygame.time.wait(5000)
@@ -178,10 +178,10 @@ def lose_screen(window, star_set):
     for star in star_set:
         star.draw(window)
 
-    font = pygame.font.Font(resource_path+"/comicsans.ttf", 60)
+    font = pygame.font.Font(resource_path + "/comicsans.ttf", 60)
     text = font.render("SORRY...YOU WEREN'T POLITE ENOUGH...",
                        True, (255, 255, 255))
-    window.blit(text, (30, WIN_HEIGHT//2 - 30))
+    window.blit(text, (30, WIN_HEIGHT // 2 - 30))
 
     pygame.display.update()
     pygame.time.wait(5000)
@@ -189,7 +189,15 @@ def lose_screen(window, star_set):
     exit(0)
 
 
-def draw(window, star_set, mail_list, player_ship, enemy_ships, apologies, score, time_in_s):
+def draw(
+        window,
+        star_set,
+        mail_list,
+        player_ship,
+        enemy_ships,
+        apologies,
+        score,
+        time_in_s):
     """
     Draws the pygame window at each frame
 
@@ -218,11 +226,11 @@ def draw(window, star_set, mail_list, player_ship, enemy_ships, apologies, score
     for apology in apologies:
         apology.draw(window)
 
-    font = pygame.font.Font(resource_path+"/comicsans.ttf", 30)
-    text = font.render("Score: "+str(score), True, (255, 255, 255))
+    font = pygame.font.Font(resource_path + "/comicsans.ttf", 30)
+    text = font.render("Score: " + str(score), True, (255, 255, 255))
     window.blit(text, (10, 5))
 
-    text = font.render("Time: "+str(time_in_s), True, (255, 255, 255))
+    text = font.render("Time: " + str(time_in_s), True, (255, 255, 255))
     window.blit(text, (WIN_WIDTH - 120, 5))
 
     player_ship.draw(window)
@@ -240,7 +248,7 @@ def main():
     score = 0
     star_set = create_stars()
     mail_list = list()
-    player_ship = PlayerShip(WIN_WIDTH//2, WIN_HEIGHT-70)
+    player_ship = PlayerShip(WIN_WIDTH // 2, WIN_HEIGHT - 70)
     enemy_ships = add_enemy(list())
     apologies = list()
     enemy_tick = MAX_ENEMY_TICK
@@ -266,7 +274,8 @@ def main():
             pygame.quit()
             exit(0)
 
-        time_elapsed_in_s = round((pygame.time.get_ticks() - start_time)/1000)
+        time_elapsed_in_s = round(
+            (pygame.time.get_ticks() - start_time) / 1000)
 
         if time_elapsed_in_s >= 99:
             # Survive for 99 seconds
@@ -323,7 +332,8 @@ def main():
             else:
                 enemy_ship.move()
 
-        # Removed enemies go in reverse while removed projectiles are not drawn anymore
+        # Removed enemies go in reverse while removed projectiles are not drawn
+        # anymore
         for enemy_ship in enemy_to_remove:
             enemy_ship.move(reverse=True)
             rand = random.randint(0, 3)
