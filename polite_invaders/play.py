@@ -237,8 +237,7 @@ def draw(
 
     pygame.display.update()
 
-
-def main():
+def play():
     """
     Run the game
     """
@@ -359,4 +358,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    play()

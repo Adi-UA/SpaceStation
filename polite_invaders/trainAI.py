@@ -9,6 +9,7 @@ from player_ship import PlayerShip
 from star import Star
 from projectile import Projectile, MailProjectile
 from apology import Apology
+import eel
 
 """Music: www.bensound.com" or "Royalty Free Music from Bensound"""
 
@@ -412,8 +413,7 @@ def run(config_path):
 
     winner = population.run(eval, 5)
 
-
-def main():
+def trainAI():
     """
     Directive method that runs the training
     """
@@ -423,4 +423,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    trainAI()

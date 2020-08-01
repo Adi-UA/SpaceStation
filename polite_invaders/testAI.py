@@ -9,6 +9,7 @@ from player_ship import PlayerShip
 from star import Star
 from projectile import Projectile, MailProjectile
 from apology import Apology
+import eel
 
 """Music: www.bensound.com" or "Royalty Free Music from Bensound"""
 
@@ -442,8 +443,7 @@ def run_model(nn):
         clear_text_tick -= 1
         projectile_tick += 1
 
-
-def main():
+def testAI():
     """
     This function is called to run the program with the stored neural net.
     """
@@ -458,4 +458,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    testAI()
