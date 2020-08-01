@@ -39,6 +39,12 @@ class enemyShip:
 
         self.y += self.y_velocity
 
+    def __eq__(self, other):
+        if other is not None and (isinstance(other, enemyShip) or issubclass(other, enemyShip)):
+            return self.x == other.x and self.y == other.y
+        else:
+            return False
+
 
 class enemyShipCreeper(enemyShip):
     def __init__(self, x, y):
