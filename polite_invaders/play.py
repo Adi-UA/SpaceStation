@@ -238,6 +238,7 @@ def draw(
 
     pygame.display.update()
 
+
 def play():
     """
     Run the game

@@ -413,6 +413,7 @@ def run(config_path):
 
     winner = population.run(eval, 5)
 
+
 def trainAI():
     """
     Directive method that runs the training
