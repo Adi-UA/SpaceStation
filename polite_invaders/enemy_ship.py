@@ -44,6 +44,7 @@ class enemyShipCreeper(enemyShip):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.img = ENEMY_SHIP_IMG_1
+        self.y_velocity = self.y_velocity*2
 
 
 class enemyShipDeathStar(enemyShip):
@@ -56,3 +57,4 @@ class enemyShipCookie(enemyShip):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.img = ENEMY_SHIP_IMG_3
+        self.y_velocity = self.y_velocity*1.5

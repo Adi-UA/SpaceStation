@@ -34,5 +34,5 @@ PLAYER_SHIP_IMG = image_reader(resource_path, "player_ship.png")
 MAIL_PROJECTILE_IMG = image_reader(resource_path, "mail_projectile.png")
 NORMAL_STAR_IMG = pygame.Surface((5, 5))
 NORMAL_STAR_IMG.fill((255,255,255))
-MAX_ENEMY_TICK = 200
+MAX_ENEMY_TICK = 150
 PROJECTILE_TICK = 50
