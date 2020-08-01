@@ -1,5 +1,7 @@
 import pygame
+import neat
 import os
+import pickle
 import random
 from reference import *
 from enemy_ship import EnemyShip, EnemyShipCreeper, EnemyShipDeathStar, EnemyShipCookie
@@ -9,6 +11,69 @@ from projectile import Projectile, MailProjectile
 from apology import Apology
 
 """Music: www.bensound.com" or "Royalty Free Music from Bensound"""
+
+
+def make_decision(network, player_ship, enemy_ship):
+    """
+    Create the input list based on the ship positions and then calculate and return the
+    decision made by the NN
+
+    Args:
+        network  : The network that must make this decision
+        player_ship (PlayerShip): The player ship
+        enemy_ship (EnemyShip): The vertically closest enemy ship
+
+    Returns:
+        list: A decision list of size 4
+    """
+
+    go_left = 0
+    go_right = 0
+    stay = 0
+    shoot = 0  # The decisions to make, they're updated to either be 1 or remain 0
+
+    if enemy_ship is not None:
+        x_dist = enemy_ship.x - player_ship.x
+        if x_dist > 0:
+            go_right = 1
+        elif x_dist < 0:
+            go_left = 1
+        else:
+            stay = 1
+
+        if abs(x_dist) < 10:
+            shoot = 1
+    else:
+        stay = 1
+
+    inputs = tuple([go_left, go_right, stay, shoot])
+
+    decision = network.activate(inputs)
+    return decision
+
+
+def get_closest_enemy(enemy_ships):
+    """
+    Gets the enemy vertically closest to earth
+
+    Args:
+        enemy_ships (list): The list of enemy ships
+
+    Returns:
+        EnemyShip or None: The relevant enemy ship or None if the list of enemies is empty
+    """
+
+    if len(enemy_ships) > 0:
+        chosen = enemy_ships[0]
+        y = (WIN_HEIGHT-70) - chosen.y
+        for enemy_ship in enemy_ships:
+            cur_y = (WIN_HEIGHT-70) - enemy_ship.y
+            if cur_y < y:
+                chosen = enemy_ship
+                y = cur_y
+        return chosen
+    else:
+        return None
 
 
 def create_mail(mail_list, x):
@@ -230,12 +295,17 @@ def draw(window, star_set, mail_list, player_ship, enemy_ships, apologies, score
     pygame.display.update()
 
 
-def main():
+def run_model(nn):
     """
-    Run the game
+    Trains the given genomes in a generation
+
+    Args:
+        genomes : The genomes
+        config : Configuration for the neural network
     """
 
     MAX_ENEMY_TICK = 150
+
     isRunning = True
     score = 0
     star_set = create_stars()
@@ -247,20 +317,15 @@ def main():
     projectile_tick = PROJECTILE_TICK
     clear_text_tick = CLEAR_TEXT_TICK
 
-    start_screen(WINDOW, star_set)
     start_time = pygame.time.get_ticks()
 
-    while isRunning:
-        game_clock.tick(60)  # 60 fps
+    prev_closest_enemy = get_closest_enemy(enemy_ships)
+    prev_dist_x = abs(player_ship.x - prev_closest_enemy.x)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                isRunning = False
-                pygame.quit()
-                exit(0)
+    while isRunning:
+        game_clock.tick(60)
 
         if score >= 42:
-            # win with a score of 42
             win_screen(WINDOW, star_set, "w")
             isRunning = False
             pygame.quit()
@@ -269,52 +334,68 @@ def main():
         time_elapsed_in_s = round((pygame.time.get_ticks() - start_time)/1000)
 
         if time_elapsed_in_s >= 99:
-            # Survive for 99 seconds
             win_screen(WINDOW, star_set, "l")
             isRunning = False
             pygame.quit()
             exit(0)
 
-        # Clear apologies and add enemies periodically
+        for event in pygame.event.get():  # We still want to quit when the close button is pressed
+            if event.type == pygame.QUIT:
+                isRunning = False
+                pygame.quit()
+                exit(0)
+
+        time_elapsed_in_s = round(
+            (pygame.time.get_ticks() - start_time)/1000)
+
+        # All apology text on screen is cleared periodically
         if clear_text_tick < 1:
             if len(apologies) > 0:
                 apologies.pop(0)
             clear_text_tick = CLEAR_TEXT_TICK
 
+        # Enemies spawn periodically
         if enemy_tick < 1:
             enemy_tick = MAX_ENEMY_TICK
             enemy_ships = add_enemy(enemy_ships)
 
-        # Read and use input
-        keys = pygame.key.get_pressed()
+        # Enemy that is vertically the closest
+        closest_enemy = get_closest_enemy(enemy_ships)
+        decision = make_decision(nn, player_ship, closest_enemy)
 
-        if keys[pygame.K_LEFT]:
+        # Indicies 0,1, and 2 are checked to see if the ship wants to left, right or stay in place
+        max_val = max(decision[:3])
+
+        if decision[0] == max_val:
             player_ship.move("L")
-        elif keys[pygame.K_RIGHT]:
+        elif decision[1] == max_val:
             player_ship.move("R")
-        else:
+        elif decision[2] == max_val:
             player_ship.move("N")
 
-        if keys[pygame.K_SPACE] and projectile_tick >= PROJECTILE_TICK:
+        # Index 3's value in decision is used to see if the ship should shoot
+        if decision[3] > 0.5 and projectile_tick >= PROJECTILE_TICK:
             create_mail(mail_list, player_ship.x)
             projectile_tick = 0
 
-        # remove projectiles and enemies that have collided
+        # Remove ships and enemies that collided
         projectile_to_remove = list()
         enemy_to_remove = list()
         for mail_projectile in mail_list:
             mail_projectile.move()
             for enemy_ship in enemy_ships:
                 if mail_projectile.collide(enemy_ship):
+                    # Give points when collision occured
                     score += 1
                     projectile_to_remove.append(mail_projectile)
                     enemy_to_remove.append(enemy_ship)
+
                     if score % 5 == 0:
                         MAX_ENEMY_TICK -= 10
 
-        # Remove enemies that bump into a player
         for enemy_ship in enemy_ships:
             if enemy_ship.collide(player_ship):
+                # Also give points is the AI earns points by bumping into the enemy
                 score += 1
                 enemy_to_remove.append(enemy_ship)
 
@@ -323,29 +404,46 @@ def main():
             else:
                 enemy_ship.move()
 
-        # Removed enemies go in reverse while removed projectiles are not drawn anymore
+        # Reverse enemy ships and projectiles that have collided with something
         for enemy_ship in enemy_to_remove:
             enemy_ship.move(reverse=True)
+
             rand = random.randint(0, 3)
             apology = Apology(
                 APOLOGY_OPTIONS[rand], enemy_ship.x, enemy_ship.y)
+
             apologies.append(apology)
 
         for mail_projectile in projectile_to_remove:
             mail_list.remove(mail_projectile)
 
-        # Check if projectiles or enemies reach the edge
-        # If an enemy is at the bottom edge, you lose
+        # Check if any enemies have reached the edge and if they have lose
         eval_edge_enemies(enemy_ships, star_set)
+
+        # Remove projectiles when they reach the upper edge
         eval_edge_projectiles(mail_list)
 
-        # Draw the frame
+        # Update screen
         draw(WINDOW, star_set, mail_list, player_ship,
              enemy_ships, apologies, score, time_elapsed_in_s)
 
-        clear_text_tick -= 1
         enemy_tick -= 1
+        clear_text_tick -= 1
         projectile_tick += 1
+
+
+def main():
+    """
+    This function is called to run the program with the stored neural net.
+    """
+
+    # Load stored NN
+    nn_file = open("best_model.pickle", "rb")
+    neural_net = pickle.load(nn_file)
+    nn_file.close()
+
+    # Use NN to run Flappy Bird
+    run_model(neural_net)
 
 
 if __name__ == "__main__":

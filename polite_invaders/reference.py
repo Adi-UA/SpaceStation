@@ -38,5 +38,5 @@ NORMAL_STAR_IMG.fill((255,255,255))
 PROJECTILE_TICK = 50
 CLEAR_TEXT_TICK = 60
 
-pygame.mixer.music.load(resource_path+"/bensound-summer.ogg")
-pygame.mixer.music.play(-1)
+#pygame.mixer.music.load(resource_path+"/bensound-summer.ogg")
+#pygame.mixer.music.play(-1)

@@ -2,7 +2,7 @@ import pygame
 from reference import *
 
 
-class enemyShip:
+class EnemyShip:
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -40,26 +40,26 @@ class enemyShip:
         self.y += self.y_velocity
 
     def __eq__(self, other):
-        if other is not None and (isinstance(other, enemyShip) or issubclass(other, enemyShip)):
+        if other is not None and (isinstance(other, EnemyShip) or issubclass(other, EnemyShip)):
             return self.x == other.x and self.y == other.y
         else:
             return False
 
 
-class enemyShipCreeper(enemyShip):
+class EnemyShipCreeper(EnemyShip):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.img = ENEMY_SHIP_IMG_1
         self.y_velocity = self.y_velocity*2
 
 
-class enemyShipDeathStar(enemyShip):
+class EnemyShipDeathStar(EnemyShip):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.img = ENEMY_SHIP_IMG_2
 
 
-class enemyShipCookie(enemyShip):
+class EnemyShipCookie(EnemyShip):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.img = ENEMY_SHIP_IMG_3

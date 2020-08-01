@@ -2,11 +2,11 @@ import pygame
 from reference import *
 
 
-class playerShip:
+class PlayerShip:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.x_velocity = 0.4/100*WIN_WIDTH
+        self.x_velocity = 0.6/100*WIN_WIDTH
         self.MOVE_TICK = 0
         self.img = PLAYER_SHIP_IMG
 
