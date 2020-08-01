@@ -1,15 +1,3 @@
-// A* Pathfinding for HTML5 Canvas Tutorial
-// by Christer (McFunkypants) Kaitila
-// http://www.mcfunkypants.com
-// http://twitter.com/McFunkypants
-
-// Based on Edsger Dijkstra's 1959 algorithm and work by:
-// Andrea Giammarchi, Alessandro Crugnola, Jeroen Beckers,
-// Peter Hart, Nils Nilsson, Bertram Raphael
-
-// Permission is granted to use this source in any
-// way you like, commercial or otherwise. Enjoy!
-
 // the game's canvas element
 var canvas = null;
 // the canvas 2d context
