@@ -49,7 +49,7 @@ later loaded when you want the AI to play in a non-training scenario. The traini
     
 # What's left
 
-Not much. We added all the space functionality we were aiming for and we are particularly proud of how it looks. We wish the eel library worked better with pygame implicitly; our workaround using subprocesses works at a small cost to the user experience.
+Not much. We added all the space functionality we were aiming for and we are particularly proud of how it looks. We wish the eel library worked better with pygame implicitly; our hacky workaround using subprocesses works but at a small cost to the user experience.
 
 
 
