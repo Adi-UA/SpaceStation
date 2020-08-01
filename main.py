@@ -3,15 +3,24 @@ import subprocess
 
 @eel.expose
 def play_game():
-    subprocess.run(["python3.7", "polite_invaders/play.py"])
+    try:
+        subprocess.run(["python3", "polite_invaders/play.py"])
+    except:
+        subprocess.run(["python", "polite_invaders"+ "\\" + "play.py"])
 
 @eel.expose
 def train_ai():
-    subprocess.run(["python3.7", "polite_invaders/trainAI.py"])
+    try:
+        subprocess.run(["python3", "polite_invaders/trainAI.py"])
+    except:
+        subprocess.run(["python", "polite_invaders"+ "\\"+ "trainAI.py"])
 
 @eel.expose
 def test_ai():
-    subprocess.run(["python3.7", "polite_invaders/testAI.py"])
+    try:
+        subprocess.run(["python3", "polite_invaders/testAI.py"])
+    except:
+        subprocess.run(["python", "polite_invaders" + "\\" + "testAI.py"])
 
 if __name__ == "__main__":
     eel.init("web")
