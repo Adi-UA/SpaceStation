@@ -6,8 +6,8 @@ resource_path = os.path.dirname(__file__)
 songs = ["/ImperialMarch.ogg", "/rick_and_morty.ogg", "/StarTrek.ogg", "/Starwars.ogg"]
 
 def random_music():
-    x = random.randint(0,len(songs)-1)
-    return songs[x]
+    i = random.randint(0,len(songs)-1)
+    return songs[i]
 
 
 pygame.init()
