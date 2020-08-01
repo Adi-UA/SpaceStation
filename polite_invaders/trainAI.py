@@ -413,7 +413,6 @@ def run(config_path):
 
     winner = population.run(eval, 5)
 
-@eel.expose
 def trainAI():
     """
     Directive method that runs the training

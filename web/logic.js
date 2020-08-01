@@ -1,9 +1,9 @@
 function train() {
-	eel.trainAI();
+	eel.train_ai();
 }
 
 function test() {
-	eel.testAI();
+	eel.test_ai();
 }
 
 function play() {
