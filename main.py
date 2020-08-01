@@ -24,6 +24,14 @@ def test_ai():
         subprocess.run(["python", "polite_invaders" + "\\" + "testAI.py"])    
     else:
         subprocess.run(["python3", "polite_invaders/testAI.py"])
+
+@eel.expose
+def play_music():
+    if (sys.platform).startswith("win"):
+        subprocess.run(["python", "Music" + "\\" + "music_player.py"])    
+    else:
+        subprocess.run(["python3", "Music/music_player.py"])
+
         
 
 if __name__ == "__main__":
