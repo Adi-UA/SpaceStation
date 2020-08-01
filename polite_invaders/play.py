@@ -238,7 +238,6 @@ def draw(
 
     pygame.display.update()
 
-@eel.expose
 def play():
     """
     Run the game

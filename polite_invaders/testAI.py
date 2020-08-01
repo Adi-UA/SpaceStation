@@ -443,7 +443,6 @@ def run_model(nn):
         clear_text_tick -= 1
         projectile_tick += 1
 
-@eel.expose
 def testAI():
     """
     This function is called to run the program with the stored neural net.
