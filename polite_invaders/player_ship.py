@@ -22,9 +22,6 @@ class playerShip:
         if new_x > 10 and new_x < WIN_WIDTH - 62:
             self.x = new_x
 
-        if self.MOVE_TICK < 4:
-            self.MOVE_TICK += 1
-
     def get_mask(self):
         return pygame.mask.from_surface(self.img)
 

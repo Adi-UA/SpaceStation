@@ -1,6 +1,7 @@
 import pygame
 import neat
 import os
+import pickle
 import random
 from reference import *
 from enemy_ship import enemyShip, enemyShipCreeper, enemyShipDeathStar, enemyShipCookie
@@ -11,7 +12,6 @@ from apology import Apology
 
 """Music: www.bensound.com" or "Royalty Free Music from Bensound"""
 
-
 def make_decision(network, player_ship, enemy_ship):
     go_left = 0
     go_right = 0
@@ -19,7 +19,7 @@ def make_decision(network, player_ship, enemy_ship):
     shoot = 0
 
     if enemy_ship is not None:
-        x_dist = enemy_ship.x - player_ship.x_velocity
+        x_dist = enemy_ship.x - player_ship.x
         if x_dist > 0:
             go_right = 1
         elif x_dist < 0:
@@ -207,10 +207,12 @@ def eval(genomes, config):
 
             if prev_closest_enemy == closest_enemy and prev_closest_enemy is not None:
                 new_dist_x = abs(player_ship.x - closest_enemy.x)
-                if new_dist_x < prev_dist_x:
+                if new_dist_x == 0:
+                    genome.fitness += 2
+                elif new_dist_x < prev_dist_x:
                     genome.fitness += 1
                 else:
-                    genome.fitness -= 1.5
+                    genome.fitness -= 3
                 prev_dist_x = new_dist_x
             else:
                 prev_closest_enemy = closest_enemy
@@ -265,6 +267,15 @@ def eval(genomes, config):
             draw(WINDOW, star_set, mail_list, player_ship,
                  enemy_ships, apologies, score, time_elapsed_in_s)
 
+            if score >= 20:
+                best_model = network
+                nn_file = open("best_model.pickle", "wb")
+                pickle.dump(best_model, nn_file)
+                nn_file.close()
+
+                isRunning = False
+                exit(0)
+
 
 def run(config_path):
     """
@@ -284,7 +295,7 @@ def run(config_path):
     stats = neat.StatisticsReporter()
     population.add_reporter(stats)
 
-    winner = population.run(eval, 1000)
+    winner = population.run(eval, 100)
 
 
 def main():
