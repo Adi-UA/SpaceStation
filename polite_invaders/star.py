@@ -21,4 +21,4 @@ class Star:
             return False
 
     def __hash__(self):
-        return 2*self.x + self.y
+        return 2 * self.x + self.y

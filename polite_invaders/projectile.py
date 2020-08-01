@@ -9,7 +9,7 @@ class Projectile:
         self.x = x
         self.y = y
         self.has_collided = False
-        self.y_velocity = -0.6/100*WIN_HEIGHT
+        self.y_velocity = -0.6 / 100 * WIN_HEIGHT
         self.img = MAIL_PROJECTILE_IMG
 
     def draw(self, window):
