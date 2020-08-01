@@ -4,13 +4,36 @@ import random
 from reference import *
 from enemy_ship import enemyShip, enemyShipCreeper, enemyShipDeathStar, enemyShipCookie
 from player_ship import playerShip
+from star import Star
+from mail_projectile import MailProjectile
+
+
+def create_mail(mail_list, x):
+    y = WIN_HEIGHT-80
+    mail_projectile = MailProjectile(x, y)
+    mail_list.append(mail_projectile)
+
+
+def create_stars():
+    star_set = set()
+
+    count = 0
+    while count < 50:
+        x = random.randint(5, WIN_WIDTH - 5)
+        y = random.randint(5, WIN_HEIGHT - 5)
+        star = Star(x, y)
+        if star not in star_set:
+            star_set.add(star)
+            count += 1
+
+    return star_set
 
 
 def add_enemy(enemy_ships):
     x = random.randrange(10, WIN_WIDTH - 80)
     y = 10
     n = random.randint(1, 3)
-    print(n)
+
     if n == 1:
         enemy_ships.append(enemyShipCreeper(x, y))
     elif n == 2:
@@ -20,11 +43,20 @@ def add_enemy(enemy_ships):
     return enemy_ships
 
 
+def eval_edge_projectiles(mail_list):
+    to_remove = list()
+    for mail_projectile in mail_list:
+        if mail_projectile.y > WIN_HEIGHT-50:
+            to_remove.append(mail_projectile)
+
+    for mail_projectile in to_remove:
+        mail_list.remove(mail_projectile)
+
+
 def eval_edge_enemies(enemy_ships):
     to_remove = list()
     for enemy_ship in enemy_ships:
         if enemy_ship.y > WIN_HEIGHT-50:
-            print("The enemy got through")
             pygame.quit()
             exit(0)
         elif enemy_ship.y < 10:
@@ -34,26 +66,38 @@ def eval_edge_enemies(enemy_ships):
         enemy_ships.remove(ship)
 
 
-def draw(window, player_ship, enemy_ships, score):
-    window.fill((0, 0, 51))
+def draw(window, star_set, mail_list, player_ship, enemy_ships, score):
+    window.fill((18, 9, 10))
+
+    for star in star_set:
+        star.draw(window)
+
+    for mail_projectile in mail_list:
+        mail_projectile.draw(window)
 
     for enemy_ship in enemy_ships:
         enemy_ship.draw(window)
 
-    font = pygame.font.SysFont(None, 25)
+    font = pygame.font.SysFont(None, 50)
     text = font.render("Score: "+str(score), True, (255, 255, 255))
-    window.blit(text, (640, 0))
+    window.blit(text, (10, 5))
+
     player_ship.draw(window)
+
     pygame.display.update()
 
 
 def main():
     global MAX_ENEMY_TICK
+
     isRunning = True
     score = 0
+    star_set = create_stars()
+    mail_list = list()
     player_ship = playerShip(WIN_WIDTH//2, WIN_HEIGHT-70)
     enemy_ships = add_enemy(list())
     enemy_tick = MAX_ENEMY_TICK
+    projectile_tick = PROJECTILE_TICK
 
     while isRunning:
         game_clock.tick(60)
@@ -77,17 +121,44 @@ def main():
         else:
             player_ship.move("N")
 
-        eval_edge_enemies(enemy_ships)
+        if keys[pygame.K_SPACE] and projectile_tick >= PROJECTILE_TICK:
+            create_mail(mail_list, player_ship.x)
+            projectile_tick = 0
+        else:
+            projectile_tick += 1
+
+        projectile_to_remove = list()
+        enemy_to_remove = list()
+        for mail_projectile in mail_list:
+            mail_projectile.move()
+            for enemy_ship in enemy_ships:
+                if mail_projectile.collide(enemy_ship):
+                    score += 1
+                    projectile_to_remove.append(mail_projectile)
+                    enemy_to_remove.append(enemy_ship)
+                    if score % 10 == 0:
+                        MAX_ENEMY_TICK -= 25
 
         for enemy_ship in enemy_ships:
             if enemy_ship.collide(player_ship):
                 score += 1
-                enemy_ship.move(reverse=True)
+                enemy_to_remove.append(enemy_ship)
 
+                if score % 10 == 0:
+                    MAX_ENEMY_TICK -= 25
             else:
                 enemy_ship.move()
 
-        draw(WINDOW, player_ship, enemy_ships, score)
+        for enemy_ship in enemy_to_remove:
+            enemy_ship.move(reverse=True)
+
+        for mail_projectile in projectile_to_remove:
+            mail_list.remove(mail_projectile)
+
+        eval_edge_enemies(enemy_ships)
+        eval_edge_projectiles(mail_list)
+
+        draw(WINDOW, star_set, mail_list, player_ship, enemy_ships, score)
 
 
 main()

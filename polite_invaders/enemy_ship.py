@@ -30,6 +30,9 @@ class enemyShip:
         else:
             return False
 
+    def get_mask(self):
+        return pygame.mask.from_surface(self.img)
+
     def move(self, reverse=False):
         if reverse:
             self.y_velocity = -self.y_velocity*1.5
