@@ -12,6 +12,7 @@ from apology import Apology
 
 """Music: www.bensound.com" or "Royalty Free Music from Bensound"""
 
+
 def make_decision(network, player_ship, enemy_ship):
     go_left = 0
     go_right = 0
@@ -144,7 +145,7 @@ def eval(genomes, config):
         network = neat.nn.FeedForwardNetwork.create(genome, config)
         genome.fitness = 0
 
-        global MAX_ENEMY_TICK
+        MAX_ENEMY_TICK = 150
 
         isRunning = True
         score = 0
@@ -165,7 +166,7 @@ def eval(genomes, config):
         while isRunning:
             game_clock.tick(1000)
 
-            if score >= 42:
+            if score >= 420:
                 isRunning = False
                 break
 
@@ -207,8 +208,8 @@ def eval(genomes, config):
 
             if prev_closest_enemy == closest_enemy and prev_closest_enemy is not None:
                 new_dist_x = abs(player_ship.x - closest_enemy.x)
-                if new_dist_x == 0:
-                    genome.fitness += 2
+                if new_dist_x >= 0 and new_dist_x <= 32:
+                    genome.fitness += 1.1
                 elif new_dist_x < prev_dist_x:
                     genome.fitness += 1
                 else:
@@ -230,7 +231,7 @@ def eval(genomes, config):
                 for enemy_ship in enemy_ships:
                     if mail_projectile.collide(enemy_ship):
                         score += 1
-                        genome.fitness += 5
+                        genome.fitness += 3
                         projectile_to_remove.append(mail_projectile)
                         enemy_to_remove.append(enemy_ship)
                         if score % 10 == 0:
@@ -239,7 +240,7 @@ def eval(genomes, config):
             for enemy_ship in enemy_ships:
                 if enemy_ship.collide(player_ship):
                     score += 1
-                    genome.fitness += 5
+                    genome.fitness += 3
                     enemy_to_remove.append(enemy_ship)
 
                     if score % 10 == 0:
@@ -267,7 +268,8 @@ def eval(genomes, config):
             draw(WINDOW, star_set, mail_list, player_ship,
                  enemy_ships, apologies, score, time_elapsed_in_s)
 
-            if score >= 20:
+            if score >= 40:
+                print(genome.fitness)
                 best_model = network
                 nn_file = open("best_model.pickle", "wb")
                 pickle.dump(best_model, nn_file)
@@ -295,7 +297,7 @@ def run(config_path):
     stats = neat.StatisticsReporter()
     population.add_reporter(stats)
 
-    winner = population.run(eval, 100)
+    winner = population.run(eval, 10)
 
 
 def main():
