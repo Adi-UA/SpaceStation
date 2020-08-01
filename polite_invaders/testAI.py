@@ -449,7 +449,7 @@ def main():
     """
 
     # Load stored NN
-    nn_file = open("best_model.pickle", "rb")
+    nn_file = open(resource_path+"/best_model.pickle", "rb")
     neural_net = pickle.load(nn_file)
     nn_file.close()
 
