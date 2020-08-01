@@ -3,10 +3,18 @@ import os
 import random
 
 resource_path = os.path.dirname(__file__)
-songs = ["/ImperialMarch.ogg", "/rick_and_morty.ogg", "/StarTrek.ogg", "/Starwars.ogg"]
+songs = [
+    "/ImperialMarch.ogg",
+    "/rick_and_morty.ogg",
+    "/StarTrek.ogg",
+    "/Starwars.ogg",
+    "/RocketMan.ogg",
+    "/Starman.ogg",
+    "/Space_Oddity.ogg"]
+
 
 def random_music():
-    i = random.randint(0,len(songs)-1)
+    i = random.randint(0, len(songs) - 1)
     return songs[i]
 
 
@@ -17,12 +25,12 @@ WIN_WIDTH = 800
 WIN_HEIGHT = 450
 pygame.display.set_caption('Space Rave with Rick and Morty')
 win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
-bg = pygame.image.load(resource_path+'/RandM.jpg')
-win.blit(bg, (0,0))
+bg = pygame.image.load(resource_path + '/RandM.jpg')
+win.blit(bg, (0, 0))
 font = pygame.font.Font(resource_path + "/comicsans.ttf", 34)
 text = font.render(" PRESS THE SPACE BAR TO CHANGE THE SONG 0",
-                    True, (255, 255, 255), (0,0,0))
-win.blit(text, (0, 405 ))
+                   True, (255, 255, 255), (0, 0, 0))
+win.blit(text, (0, 405))
 pygame.display.update()
 
 
@@ -40,10 +48,8 @@ while isRunning:
             pygame.quit()
             exit(0)
 
-        keys = pygame.key.get_pressed()   
+        keys = pygame.key.get_pressed()
 
         if keys[pygame.K_SPACE]:
             pygame.mixer.music.load(resource_path + random_music())
             pygame.mixer.music.play(1)
-
-

@@ -443,13 +443,14 @@ def run_model(nn):
         clear_text_tick -= 1
         projectile_tick += 1
 
+
 def testAI():
     """
     This function is called to run the program with the stored neural net.
     """
 
     # Load stored NN
-    nn_file = open(resource_path+"/best_model.pickle", "rb")
+    nn_file = open(resource_path + "/best_model.pickle", "rb")
     neural_net = pickle.load(nn_file)
     nn_file.close()
 
