@@ -1,0 +1,4 @@
+neat-python==0.92
+pycodestyle==2.6.0
+pygame==1.9.6
+toml==0.10.1
