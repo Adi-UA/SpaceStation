@@ -2,7 +2,7 @@ bottle==0.12.19
 bottle-websocket==0.2.9
 Eel==0.13.2
 future==0.18.2
-gevent==20.6.2
+gevent==23.9.1
 gevent-websocket==0.10.1
 greenlet==0.4.16
 neat-python==0.92
